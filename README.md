@@ -1,0 +1,1 @@
+A program to simulate chess games. Later will be used for building a basic chess engine.
