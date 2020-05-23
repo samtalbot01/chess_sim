@@ -11,28 +11,34 @@
 class Piece;
 class Board;
 
-typedef struct
+struct Position
 {
     char file;
     int rank;
     Piece* occupier;
-} Position;
+    std::string token;
+    Position(char,int);
+    bool operator== (const Position&) const; //equality given pos struct
+    bool operator== (const std::string&) const; //equality given token string
+};
 
-bool operator==(Position,Position);
 
-typedef struct
+struct Move
 {
     Position* end;
-    Piece* mover;
+    Position* start;
     int value;
-} Move;
+    Move(Position*,Position*,int);
+};
 
 class Piece
 {
     public:
-        Piece(Position*,Board*,int);
-        //virtual std::vector<Move> moves();
-        std::string get_type(){return type;};
+        Piece(int);
+        virtual std::vector<Move> moves(Position*,Board*) const {return {};};
+        std::string get_type() const {return type;};
+        std::string get_full_name() const;
+        int get_colour() const {return colour;};
     protected:
         std::string type;
         Board* board;
@@ -42,12 +48,19 @@ class Piece
 
 class Board
 {
+    private:
+        std::vector<Position> positions;
+        std::vector<Piece*> pieces;
+        Position* get_from_token(std::string);
     public:
         Board(int);
-        //Position* find(Piece*);
-        std::vector<Position> positions;
-        std::vector<Piece> pieces;
-        std::string to_string();
+        Position* find(Piece*); //todo
+        const std::vector<Position> &get_positions() const;
+        std::string to_string() const;
+        void add_piece(Piece*,Position*); //todo
+        void add_piece(Piece*,std::string); //todo
+       // void make_move(Move);
+        
 };
 
 

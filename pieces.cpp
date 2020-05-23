@@ -1,6 +1,12 @@
 #include "pieces.h"
 
-Pawn::Pawn(Position* p,Board*b,int c): Piece(p,b,c)
+Pawn::Pawn(int c): Piece(c)
 {
     type="Pawn";
+}
+
+std::vector<Move> Pawn::moves(Position* p,Board* b) const
+{
+    //stub
+    return {};
 }

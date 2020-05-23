@@ -7,7 +7,8 @@
 class Pawn: public Piece
 {
     public:
-        Pawn(Position*,Board*,int);
+        Pawn(int);
+        std::vector<Move> moves(Position*,Board*) const; //todo
 };
 
 #endif
