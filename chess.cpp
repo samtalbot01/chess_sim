@@ -44,7 +44,7 @@ Board::Board(int mode)
     if(mode==STANDARD)
     {
         //make board
-        
+	add_piece(new Pawn(B),"B4");
     }
     else if(mode==EMPTY)
     {

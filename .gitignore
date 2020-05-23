@@ -1,1 +1,4 @@
-test.exe
+*.exe
+*.out
+*.h.gch
+.vscode/
