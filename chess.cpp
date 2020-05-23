@@ -43,8 +43,14 @@ Board::Board(int mode)
 
     if(mode==STANDARD)
     {
-        //make board
-	add_piece(new Pawn(B),"B4");
+        //WHITE
+        //PAWNS
+        for(char c='A';c<='H';c++)
+        {
+            char t[2] = {c,'2'};
+            std::string s(t);
+            add_piece(new Pawn(W),t);
+        }
     }
     else if(mode==EMPTY)
     {

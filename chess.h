@@ -39,9 +39,11 @@ class Piece
         std::string get_type() const {return type;};
         std::string get_full_name() const;
         int get_colour() const {return colour;};
+        int get_value() const {return value;};
     protected:
         std::string type;
         Board* board;
+        int value;
     private:
         int colour;
 };
