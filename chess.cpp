@@ -47,10 +47,49 @@ Board::Board(int mode)
         //PAWNS
         for(char c='A';c<='H';c++)
         {
-            char t[2] = {c,'2'};
-            std::string s(t);
-            add_piece(new Pawn(W),t);
+            std::ostringstream oss;
+            oss<<c<<"2";
+            add_piece(new Pawn(W),oss.str());
         }
+        
+        //BLACK PAWNS
+        for(char c='A';c<='H';c++)
+        {
+            std::ostringstream oss;
+            oss<<c<<"7";
+            add_piece(new Pawn(B),oss.str());
+        }
+
+        //ROOKS
+        add_piece(new Rook(W),"A1");
+        add_piece(new Rook(W),"H1");
+
+        add_piece(new Rook(B),"A8");
+        add_piece(new Rook(B),"H8");
+
+        //KNIGHTS
+        add_piece(new Knight(W),"B1");
+        add_piece(new Knight(W),"G1");
+
+        add_piece(new Knight(B),"B8");
+        add_piece(new Knight(B),"G8");
+
+        //BISHOPS
+        add_piece(new Bishop(W),"C1");
+        add_piece(new Bishop(W),"F1");
+
+        add_piece(new Bishop(B),"C8");
+        add_piece(new Bishop(B),"F8");
+
+        //QUEENS
+        add_piece(new Queen(W),"D1");
+
+        add_piece(new Queen(B),"D8");
+
+        //KINGS
+        add_piece(new King(W),"E1");
+
+        add_piece(new King(B),"E8");
     }
     else if(mode==EMPTY)
     {
