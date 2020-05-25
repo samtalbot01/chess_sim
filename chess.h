@@ -28,14 +28,14 @@ struct Move
     Position* end;
     Position* start;
     int value;
-    Move(Position*,Position*,int);
+    Move(Position*,Position*);
 };
 
 class Piece
 {
     public:
         Piece(int);
-        virtual std::vector<Move> moves(Position*,Board*) const {return {};};
+        virtual std::vector<Move> moves(Position*,Board* b) const {return {};};
         std::string get_type() const {return type;};
         std::string get_full_name() const;
         int get_colour() const {return colour;};
@@ -56,13 +56,17 @@ class Board
         Position* get_from_token(std::string);
     public:
         Board(int);
-        Position* find(Piece*); //todo
+        ~Board();
+        Position* find(Piece*);
         const std::vector<Position> &get_positions() const;
         std::string to_string() const;
-        void add_piece(Piece*,Position*); //todo
-        void add_piece(Piece*,std::string); //todo
-       // void make_move(Move);
+        int add_piece(Piece*,Position*);
+        int add_piece(Piece*,std::string); 
+        int make_move(Move);
+        //bool is_valid(Move);
+        const Position* get_from_token_const(std::string) const;
         
+
 };
 
 

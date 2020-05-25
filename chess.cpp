@@ -20,6 +20,8 @@ std::string Piece::get_full_name() const
     else
         return "White "+type;
 }
+
+
 /*
 End piece methods
 */
@@ -95,6 +97,10 @@ Board::Board(int mode)
     {
         //don't add any pieces
     }
+
+    auto p = get_from_token("A2");
+    for(Move& m:p->occupier->moves(p,this))
+        std::cout << m.end->token << std::endl;
 }
 
 const vector<Position> &Board::get_positions() const
@@ -135,24 +141,63 @@ Position* Board::find(Piece* p)
     return 0;
 }
 
-void Board::add_piece(Piece* p,Position* pos)
+int Board::add_piece(Piece* p,Position* pos)
 {
     if(!find(p))
     {
         pos->occupier=p;
         pieces.push_back(p);
+        return 1;
     }
+
+    return 0;
 }
 
-void Board::add_piece(Piece*p,std::string s)
+int Board::add_piece(Piece* p,std::string s)
 {
     Position* pos = get_from_token(s);
     if(pos&&!find(p))
     {
         pos->occupier=p;
         pieces.push_back(p);
+        return 1;
     }
+    
+    return 0;
+    
     //do fuck all if its 0 since the position doesn't exist
+}
+
+//self explanatory
+Board::~Board()
+{
+    for(auto& p:pieces)
+        delete p;
+}
+
+//minimal validation(only checks that origin pos actually has a piece in it) just edits the board given the move
+int Board::make_move(Move m)
+{
+    if(m.start->occupier)
+    {
+        m.end->occupier = m.start->occupier;
+        m.start->occupier=0;
+        return 1;
+    }
+    return 0;
+}
+
+const Position* Board::get_from_token_const(std::string s) const
+{
+    if(s.length()!=2)
+        return 0;
+    for(int i=0;i<positions.size();i++)
+        if(positions[i]==s)
+        {
+            const Position* p = &positions[i];
+            return p;
+        }
+    return 0;
 }
 /*
 End board methods
@@ -191,11 +236,15 @@ bool Position::operator== (const std::string& s) const
     return false;
 }
 
-Move::Move(Position* s,Position* e,int v)
+Move::Move(Position* s,Position* e)
 {
     start=s;
     end=e;
-    value=v;
+
+    if(end->occupier)
+        value = end->occupier->get_value();
+    else
+        value = 0;
 }
 /*
 End struct methods
