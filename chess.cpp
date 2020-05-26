@@ -97,10 +97,6 @@ Board::Board(int mode)
     {
         //don't add any pieces
     }
-
-    auto p = get_from_token("A2");
-    for(Move& m:p->occupier->moves(p,this))
-        std::cout << m.end->token << std::endl;
 }
 
 const vector<Position> &Board::get_positions() const
@@ -187,16 +183,20 @@ int Board::make_move(Move m)
     return 0;
 }
 
-const Position* Board::get_from_token_const(std::string s) const
+Position* Board::traverse(Position* origin,int df,int dr)
 {
-    if(s.length()!=2)
-        return 0;
-    for(int i=0;i<positions.size();i++)
-        if(positions[i]==s)
-        {
-            const Position* p = &positions[i];
-            return p;
-        }
+    Position tdest(origin->file+df,origin->rank+dr);
+    Position* dest = find(tdest);
+    if(dest)
+        return dest;
+    return 0;
+}
+
+Position* Board::find(Position& p)
+{
+    for(auto& pos:positions)
+        if(p==pos)
+            return &pos;
     return 0;
 }
 /*

@@ -7,63 +7,87 @@ Pawn::Pawn(int c): Piece(c)
     value = 1;
 }
 
-//BIG VOODOO REMAKE THIS IT IS AN ABOMINATION
 std::vector<Move> Pawn::moves(Position* p,Board* b) const
 {
     std::vector<Move> m;
+    //White side movements (this is only for pawns) 
     if(get_colour()==W)
     {
-        std::ostringstream o;
-
         //forward moves
-        int nrank = p->rank + 1;
-        o<<p->file<<nrank;
-        auto pos1 = b->get_from_token_const(o.str());
-        if(!pos1->occupier)
-        {
-            Move mv(p,(Position*)pos1); //VOODOO DONT JUDGE ME
-            m.push_back(mv);
-            //Double move
-            if(p->rank==2)
+        auto e0 = b->traverse(p,0,1);
+        if(e0)
+            if(!e0->occupier)
             {
-                o.str("");
-                nrank++;
-                o<<p->file<<nrank;
-                auto pos2 = b->get_from_token_const(o.str());
-                if(!pos2->occupier)
+                Move mv0(p,e0);
+                m.push_back(mv0);
+                if(p->rank==2)
                 {
-                   Move mv2(p,(Position*)pos2); //VOODOO
-                   m.push_back(mv2); 
+                    auto e1 = b->traverse(p,0,2);
+                    if(!e1->occupier)
+                    {
+                        Move mv1(p,e1);
+                        m.push_back(mv1);
+                    }
                 }
             }
-        }
-        o.str("");
-
-        //Diagonal takes
-        char nfile = p->file;
-        nrank = p->rank + 1;
-        if(nfile-1>='A')
-        {
-            o<<nfile-1<<nrank;
-            auto takepos = b->get_from_token_const(o.str());
-            if(takepos->occupier)
-            {
-                Move mv(p,(Position*) takepos);
-                m.push_back(mv);
-            }
-        }
-        o.str("");
-        if(nfile+1<='H')
-        {
-            o<<nfile+1<<nrank;
-            auto takepos = b->get_from_token_const(o.str());
-            if(takepos->occupier)
-            {
-                Move mv(p,(Position*) takepos);
-                m.push_back(mv);
-            }
-        }
+        
+        //takes
+        auto e2 = b->traverse(p,1,1);
+        auto e3 = b->traverse(p,-1,1);
+        if(e2)
+            if(e2->occupier)
+                if(e2->occupier->get_colour()!=get_colour())
+                {
+                    Move mv2(p,e2);
+                    m.push_back(mv2);
+                }
+        if(e3)
+            if(e3->occupier)
+                if(e3->occupier->get_colour()!=get_colour())
+                {
+                    Move mv3(p,e3);
+                    m.push_back(mv3);
+                }
     }
+    else
+    {
+        //BLACK MOVEMENTS
+        auto e0 = b->traverse(p,0,-1);
+        if(e0)
+            if(!e0->occupier)
+            {
+                Move mv0(p,e0);
+                m.push_back(mv0);
+                if(p->rank==7)
+                {
+                    auto e1 = b->traverse(p,0,-2);
+                    if(!e1->occupier)
+                    {
+                        Move mv1(p,e1);
+                        m.push_back(mv1);
+                    }
+                }
+            }
+        
+        //takes
+        auto e2 = b->traverse(p,1,-1);
+        auto e3 = b->traverse(p,-1,-1);
+        if(e2)
+            if(e2->occupier)
+                if(e2->occupier->get_colour()!=get_colour())
+                {
+                    Move mv2(p,e2);
+                    m.push_back(mv2);
+                }
+        if(e3)
+            if(e3->occupier)
+                if(e3->occupier->get_colour()!=get_colour())
+                {
+                    Move mv3(p,e3);
+                    m.push_back(mv3);
+                }
+    }
+    
     return m;
 }
 

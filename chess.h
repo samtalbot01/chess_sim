@@ -54,6 +54,7 @@ class Board
         std::vector<Position> positions;
         std::vector<Piece*> pieces;
         Position* get_from_token(std::string);
+        Position* find(Position&);
     public:
         Board(int);
         ~Board();
@@ -64,7 +65,7 @@ class Board
         int add_piece(Piece*,std::string); 
         int make_move(Move);
         //bool is_valid(Move);
-        const Position* get_from_token_const(std::string) const;
+        Position* traverse(Position* ,int,int);
         
 
 };
