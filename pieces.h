@@ -15,7 +15,7 @@ class Rook: public Piece
 {
     public:
         Rook(int);
-        std::vector<Move> moves(Position*,const std::vector<Position>& board) const; //todo
+        std::vector<Move> moves(Position*,Board* b) const; //todo
 };
 
 class Bishop: public Piece

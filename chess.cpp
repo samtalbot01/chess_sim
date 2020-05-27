@@ -97,6 +97,16 @@ Board::Board(int mode)
     {
         //don't add any pieces
     }
+    /*
+    auto r = new Rook(W);
+    add_piece(r,"D5");
+    auto mvs = r->moves(get_from_token("D5"),this);
+    std::cout << mvs.size() << std::endl;
+    for(Move& m:mvs)
+    {
+        std::cout << m.end->token << ": "<< m.value << std::endl;
+    }
+    */
 }
 
 const vector<Position> &Board::get_positions() const
@@ -240,7 +250,6 @@ Move::Move(Position* s,Position* e)
 {
     start=s;
     end=e;
-
     if(end->occupier)
         value = end->occupier->get_value();
     else

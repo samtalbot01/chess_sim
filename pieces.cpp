@@ -87,7 +87,6 @@ std::vector<Move> Pawn::moves(Position* p,Board* b) const
                     m.push_back(mv3);
                 }
     }
-    
     return m;
 }
 
@@ -98,10 +97,98 @@ Rook::Rook(int c): Piece(c)
     value = 5;
 }
 
-std::vector<Move> Rook::moves(Position* p,const std::vector<Position>& b) const
+std::vector<Move> Rook::moves(Position* p,Board* b) const
 {
-    //stub
-    return {};
+    std::vector<Move> m;
+
+    //upwards traverse
+    int increment = 1;
+    while (b->traverse(p,0,increment))
+    {
+        Position* endp = b->traverse(p,0,increment);
+        if(endp->occupier)
+        {
+            if(endp->occupier->get_colour()!=get_colour())
+            {
+                Move mv(p,endp);
+                m.push_back(mv);
+            }
+            break;// theres a piece so can't get past
+        }
+        else
+        {
+            Move mv(p,endp);
+            m.push_back(mv);
+        }
+        increment++;
+    }
+    
+    //Downwards
+    increment = -1;
+    while (b->traverse(p,0,increment))
+    {
+        Position* endp = b->traverse(p,0,increment);
+        if(endp->occupier)
+        {
+            if(endp->occupier->get_colour()!=get_colour())
+            {
+                Move mv(p,endp);
+                m.push_back(mv);
+            }
+            break;// theres a piece so can't get past
+        }
+        else
+        {
+            Move mv(p,endp);
+            m.push_back(mv);
+        }
+        increment--;
+    }
+
+    //Right
+    increment=1;
+    while (b->traverse(p,increment,0))
+    {
+        Position* endp = b->traverse(p,increment,0);
+        if(endp->occupier)
+        {
+            if(endp->occupier->get_colour()!=get_colour())
+            {
+                Move mv(p,endp);
+                m.push_back(mv);
+            }
+            break;// theres a piece so can't get past
+        }
+        else
+        {
+            Move mv(p,endp);
+            m.push_back(mv);
+        }
+        increment++;
+    }
+
+    //Left
+    increment = -1;
+    while (b->traverse(p,increment,0))
+    {
+        Position* endp = b->traverse(p,increment,0);
+        if(endp->occupier)
+        {
+            if(endp->occupier->get_colour()!=get_colour())
+            {
+                Move mv(p,endp);
+                m.push_back(mv);
+            }
+            break;// theres a piece so can't get past
+        }
+        else
+        {
+            Move mv(p,endp);
+            m.push_back(mv);
+        }
+        increment--;
+    }
+    return m;
 }
 
 //Knight
