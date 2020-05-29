@@ -36,6 +36,7 @@ End piece methods
  **/
 Board::Board(int mode)
 {
+    
     for(char c='A';c<='H';c++)
         for(int i=1;i<=8;i++)
         {
@@ -97,16 +98,7 @@ Board::Board(int mode)
     {
         //don't add any pieces
     }
-    /*
-    auto r = new Rook(W);
-    add_piece(r,"D5");
-    auto mvs = r->moves(get_from_token("D5"),this);
-    std::cout << mvs.size() << std::endl;
-    for(Move& m:mvs)
-    {
-        std::cout << m.end->token << ": "<< m.value << std::endl;
-    }
-    */
+    
 }
 
 const vector<Position> &Board::get_positions() const
@@ -208,6 +200,30 @@ Position* Board::find(Position& p)
         if(p==pos)
             return &pos;
     return 0;
+}
+
+int Board::process_move(Position* o, Position* e, std::vector<Move>& l)
+{
+    int stop=0;
+    if(e)
+    {
+        if(e->occupier)
+        {
+            stop = 1; //stop run
+            if(e->occupier->get_colour()!=o->occupier->get_colour())
+            {
+                Move mv(o,e);
+                l.push_back(mv);
+            }
+        }
+        else
+        {
+            //unoccupied add move no stop
+            Move mv(o,e);
+            l.push_back(mv);
+        }
+    }
+    return stop;
 }
 /*
 End board methods

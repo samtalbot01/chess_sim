@@ -66,8 +66,7 @@ class Board
         int make_move(Move);
         //bool is_valid(Move);
         Position* traverse(Position* ,int,int);
-        
-
+        static int process_move(Position*,Position*,std::vector<Move>&);
 };
 
 

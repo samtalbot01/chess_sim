@@ -106,20 +106,8 @@ std::vector<Move> Rook::moves(Position* p,Board* b) const
     while (b->traverse(p,0,increment))
     {
         Position* endp = b->traverse(p,0,increment);
-        if(endp->occupier)
-        {
-            if(endp->occupier->get_colour()!=get_colour())
-            {
-                Move mv(p,endp);
-                m.push_back(mv);
-            }
-            break;// theres a piece so can't get past
-        }
-        else
-        {
-            Move mv(p,endp);
-            m.push_back(mv);
-        }
+        if (Board::process_move(p, endp, m))
+            break;
         increment++;
     }
     
@@ -128,20 +116,8 @@ std::vector<Move> Rook::moves(Position* p,Board* b) const
     while (b->traverse(p,0,increment))
     {
         Position* endp = b->traverse(p,0,increment);
-        if(endp->occupier)
-        {
-            if(endp->occupier->get_colour()!=get_colour())
-            {
-                Move mv(p,endp);
-                m.push_back(mv);
-            }
-            break;// theres a piece so can't get past
-        }
-        else
-        {
-            Move mv(p,endp);
-            m.push_back(mv);
-        }
+        if (Board::process_move(p, endp, m))
+            break;
         increment--;
     }
 
@@ -150,20 +126,8 @@ std::vector<Move> Rook::moves(Position* p,Board* b) const
     while (b->traverse(p,increment,0))
     {
         Position* endp = b->traverse(p,increment,0);
-        if(endp->occupier)
-        {
-            if(endp->occupier->get_colour()!=get_colour())
-            {
-                Move mv(p,endp);
-                m.push_back(mv);
-            }
-            break;// theres a piece so can't get past
-        }
-        else
-        {
-            Move mv(p,endp);
-            m.push_back(mv);
-        }
+        if (Board::process_move(p, endp, m))
+            break;
         increment++;
     }
 
@@ -172,20 +136,8 @@ std::vector<Move> Rook::moves(Position* p,Board* b) const
     while (b->traverse(p,increment,0))
     {
         Position* endp = b->traverse(p,increment,0);
-        if(endp->occupier)
-        {
-            if(endp->occupier->get_colour()!=get_colour())
-            {
-                Move mv(p,endp);
-                m.push_back(mv);
-            }
-            break;// theres a piece so can't get past
-        }
-        else
-        {
-            Move mv(p,endp);
-            m.push_back(mv);
-        }
+        if (Board::process_move(p, endp, m))
+            break;
         increment--;
     }
     return m;
@@ -198,10 +150,35 @@ Knight::Knight(int c): Piece(c)
     value = 3;
 }
 
-std::vector<Move> Knight::moves(Position* p,const std::vector<Position>& b) const
+std::vector<Move> Knight::moves(Position* p,Board* b) const
 {
-    //stub
-    return {};
+    std::vector<Move> m;
+
+    //top fork
+    auto endpu = b->traverse(p,1,2);
+    Board::process_move(p,endpu,m);
+    auto endpu2 = b->traverse(p,-1,2);
+    Board::process_move(p,endpu2,m);
+
+    //down
+    auto endpd = b->traverse(p,1,-2);
+    Board::process_move(p,endpd,m);
+    auto endpd2 = b->traverse(p,-1,-2);
+    Board::process_move(p,endpd2,m);
+
+    //Left
+    auto endpl = b->traverse(p,-2,1);
+    Board::process_move(p,endpl,m);
+    auto endpl2 = b->traverse(p,-2,-1);
+    Board::process_move(p,endpl2,m);
+
+    //Right
+    auto endpr = b->traverse(p,2,1);
+    Board::process_move(p,endpr,m);
+    auto endpr2 = b->traverse(p,2,-1);
+    Board::process_move(p,endpr2,m);
+
+    return m;
 }
 
 //Bishop
@@ -211,7 +188,7 @@ Bishop::Bishop(int c): Piece(c)
     value = 3;
 }
 
-std::vector<Move> Bishop::moves(Position* p,const std::vector<Position>& b) const
+std::vector<Move> Bishop::moves(Position* p,Board* b) const
 {
     //stub
     return {};
@@ -224,7 +201,7 @@ Queen::Queen(int c): Piece(c)
     value = 9;
 }
 
-std::vector<Move> Queen::moves(Position* p,const std::vector<Position>& b) const
+std::vector<Move> Queen::moves(Position* p,Board* b) const
 {
     //stub
     return {};
@@ -237,8 +214,10 @@ King::King(int c): Piece(c)
     value = 1000;
 }
 
-std::vector<Move> King::moves(Position* p,const std::vector<Position>& b) const
+std::vector<Move> King::moves(Position* p,Board* b) const
 {
     //stub
     return {};
 }
+
+//Extra
