@@ -29,6 +29,7 @@ struct Move
     Position* start;
     int value;
     Move(Position*,Position*);
+    Move inv();
 };
 
 class Piece
@@ -40,6 +41,7 @@ class Piece
         std::string get_full_name() const;
         int get_colour() const {return colour;};
         int get_value() const {return value;};
+
     protected:
         std::string type;
         Board* board;
@@ -57,8 +59,8 @@ class Board
         Position* find(Position&);
     public:
         Board(int);
-        ~Board();
         Position* find(Piece*);
+        void destroy();
         const std::vector<Position> &get_positions() const;
         std::string to_string() const;
         int add_piece(Piece*,Position*);
@@ -66,7 +68,9 @@ class Board
         int make_move(Move);
         //bool is_valid(Move);
         Position* traverse(Position* ,int,int);
-        static int process_move(Position*,Position*,std::vector<Move>&);
+        int process_move(Position*,Position*,std::vector<Move>&);
+        bool check(int);
+        bool check(int,Move);
 };
 
 

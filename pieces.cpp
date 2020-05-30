@@ -99,14 +99,14 @@ Rook::Rook(int c): Piece(c)
 
 std::vector<Move> Rook::moves(Position* p,Board* b) const
 {
-    std::vector<Move> m;
+    std::vector<Move> m = {};
 
     //upwards traverse
     int increment = 1;
     while (b->traverse(p,0,increment))
     {
         Position* endp = b->traverse(p,0,increment);
-        if (Board::process_move(p, endp, m))
+        if (b->process_move(p, endp, m))
             break;
         increment++;
     }
@@ -116,7 +116,7 @@ std::vector<Move> Rook::moves(Position* p,Board* b) const
     while (b->traverse(p,0,increment))
     {
         Position* endp = b->traverse(p,0,increment);
-        if (Board::process_move(p, endp, m))
+        if (b->process_move(p, endp, m))
             break;
         increment--;
     }
@@ -126,7 +126,7 @@ std::vector<Move> Rook::moves(Position* p,Board* b) const
     while (b->traverse(p,increment,0))
     {
         Position* endp = b->traverse(p,increment,0);
-        if (Board::process_move(p, endp, m))
+        if (b->process_move(p, endp, m))
             break;
         increment++;
     }
@@ -136,7 +136,7 @@ std::vector<Move> Rook::moves(Position* p,Board* b) const
     while (b->traverse(p,increment,0))
     {
         Position* endp = b->traverse(p,increment,0);
-        if (Board::process_move(p, endp, m))
+        if (b->process_move(p, endp, m))
             break;
         increment--;
     }
@@ -156,27 +156,27 @@ std::vector<Move> Knight::moves(Position* p,Board* b) const
 
     //top fork
     auto endpu = b->traverse(p,1,2);
-    Board::process_move(p,endpu,m);
+    b->process_move(p,endpu,m);
     auto endpu2 = b->traverse(p,-1,2);
-    Board::process_move(p,endpu2,m);
+    b->process_move(p,endpu2,m);
 
     //down
     auto endpd = b->traverse(p,1,-2);
-    Board::process_move(p,endpd,m);
+    b->process_move(p,endpd,m);
     auto endpd2 = b->traverse(p,-1,-2);
-    Board::process_move(p,endpd2,m);
+    b->process_move(p,endpd2,m);
 
     //Left
     auto endpl = b->traverse(p,-2,1);
-    Board::process_move(p,endpl,m);
+    b->process_move(p,endpl,m);
     auto endpl2 = b->traverse(p,-2,-1);
-    Board::process_move(p,endpl2,m);
+    b->process_move(p,endpl2,m);
 
     //Right
     auto endpr = b->traverse(p,2,1);
-    Board::process_move(p,endpr,m);
+    b->process_move(p,endpr,m);
     auto endpr2 = b->traverse(p,2,-1);
-    Board::process_move(p,endpr2,m);
+    b->process_move(p,endpr2,m);
 
     return m;
 }
@@ -190,8 +190,53 @@ Bishop::Bishop(int c): Piece(c)
 
 std::vector<Move> Bishop::moves(Position* p,Board* b) const
 {
-    //stub
-    return {};
+    std::vector<Move> m;
+
+    //NE diagonal
+    int increment=1;
+    do
+    {
+        auto endp = b->traverse(p,increment,increment);
+        if(b->process_move(p,endp,m))
+            break;
+        increment++;
+    }
+    while (b->traverse(p,increment,increment)); //spicy do while for fashion points
+
+    //NW diagonal
+    increment=1;
+    do
+    {
+        auto endp = b->traverse(p,-increment,increment);
+        if(b->process_move(p,endp,m))
+            break;
+        increment++;
+    }
+    while (b->traverse(p,-increment,increment));
+    
+    //SE diagonal
+    increment=1;
+    do
+    {
+        auto endp = b->traverse(p,increment,-increment);
+        if(b->process_move(p,endp,m))
+            break;
+        increment++;
+    }
+    while (b->traverse(p,increment,-increment));
+
+    //SW diagonal
+    increment=1;
+    do
+    {
+        auto endp = b->traverse(p,-increment,-increment);
+        if(b->process_move(p,endp,m))
+            break;
+        increment++;
+    }
+    while (b->traverse(p,-increment,-increment));
+
+    return m;
 }
 
 //Queen
@@ -203,8 +248,92 @@ Queen::Queen(int c): Piece(c)
 
 std::vector<Move> Queen::moves(Position* p,Board* b) const
 {
-    //stub
-    return {};
+    //Copy bishop code & rook code
+    std::vector<Move> m;
+
+    //upwards traverse
+    int increment = 1;
+    while (b->traverse(p,0,increment))
+    {
+        Position* endp = b->traverse(p,0,increment);
+        if (b->process_move(p, endp, m))
+            break;
+        increment++;
+    }
+    
+    //Downwards
+    increment = -1;
+    while (b->traverse(p,0,increment))
+    {
+        Position* endp = b->traverse(p,0,increment);
+        if (b->process_move(p, endp, m))
+            break;
+        increment--;
+    }
+
+    //Right
+    increment=1;
+    while (b->traverse(p,increment,0))
+    {
+        Position* endp = b->traverse(p,increment,0);
+        if (b->process_move(p, endp, m))
+            break;
+        increment++;
+    }
+
+    //Left
+    increment = -1;
+    while (b->traverse(p,increment,0))
+    {
+        Position* endp = b->traverse(p,increment,0);
+        if (b->process_move(p, endp, m))
+            break;
+        increment--;
+    }
+
+    increment=1;
+    do
+    {
+        auto endp = b->traverse(p,increment,increment);
+        if(b->process_move(p,endp,m))
+            break;
+        increment++;
+    }
+    while (b->traverse(p,increment,increment)); //spicy do while for fashion points
+
+    //NW diagonal
+    increment=1;
+    do
+    {
+        auto endp = b->traverse(p,-increment,increment);
+        if(b->process_move(p,endp,m))
+            break;
+        increment++;
+    }
+    while (b->traverse(p,-increment,increment));
+    
+    //SE diagonal
+    increment=1;
+    do
+    {
+        auto endp = b->traverse(p,increment,-increment);
+        if(b->process_move(p,endp,m))
+            break;
+        increment++;
+    }
+    while (b->traverse(p,increment,-increment));
+
+    //SW diagonal
+    increment=1;
+    do
+    {
+        auto endp = b->traverse(p,-increment,-increment);
+        if(b->process_move(p,endp,m))
+            break;
+        increment++;
+    }
+    while (b->traverse(p,-increment,-increment));
+    return m;
 }
 
 //King
@@ -216,8 +345,31 @@ King::King(int c): Piece(c)
 
 std::vector<Move> King::moves(Position* p,Board* b) const
 {
-    //stub
-    return {};
-}
+    std::vector<Move> m;
+    //No quick way. just check all surrounding squares
+    auto endp = b->traverse(p,1,0);
+    b->process_move(p,endp,m);
 
-//Extra
+    endp = b->traverse(p,-1,0);
+    b->process_move(p,endp,m);
+
+    endp = b->traverse(p,0,1);
+    b->process_move(p,endp,m);
+
+    endp = b->traverse(p,0,-1);
+    b->process_move(p,endp,m);
+
+    endp = b->traverse(p,1,1);
+    b->process_move(p,endp,m);
+
+    endp = b->traverse(p,-1,1);
+    b->process_move(p,endp,m);
+
+    endp = b->traverse(p,1,-1);
+    b->process_move(p,endp,m);
+
+    endp = b->traverse(p,-1,-1);
+    b->process_move(p,endp,m);
+
+    return m;
+}

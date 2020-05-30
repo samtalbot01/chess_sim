@@ -98,6 +98,8 @@ Board::Board(int mode)
     {
         //don't add any pieces
     }
+
+
     
 }
 
@@ -167,7 +169,7 @@ int Board::add_piece(Piece* p,std::string s)
 }
 
 //self explanatory
-Board::~Board()
+void Board::destroy()
 {
     for(auto& p:pieces)
         delete p;
@@ -205,6 +207,7 @@ Position* Board::find(Position& p)
 int Board::process_move(Position* o, Position* e, std::vector<Move>& l)
 {
     int stop=0;
+    bool pchk;
     if(e)
     {
         if(e->occupier)
@@ -213,6 +216,7 @@ int Board::process_move(Position* o, Position* e, std::vector<Move>& l)
             if(e->occupier->get_colour()!=o->occupier->get_colour())
             {
                 Move mv(o,e);
+                //pchk = check(o->occupier->get_colour(),mv);
                 l.push_back(mv);
             }
         }
@@ -220,11 +224,49 @@ int Board::process_move(Position* o, Position* e, std::vector<Move>& l)
         {
             //unoccupied add move no stop
             Move mv(o,e);
+            //pchk = check(o->occupier->get_colour(),mv);
             l.push_back(mv);
         }
     }
     return stop;
 }
+
+bool Board::check(int c)
+{
+    //Checks all enemy pieces moves for king attacks
+    Position* pos = 0;
+    for(Piece* p:pieces)
+        if(p->get_colour()==c&&p->get_type()=="King")
+        {
+            pos = find(p);
+            break;
+        }
+    Piece* k; //just for brevity
+    if(!pos)
+        return false; //no king so can't be in check
+    else
+        k = pos->occupier;
+    
+    std::vector<std::vector<Move>> mvec;
+    for(Piece* p:pieces)
+        if(p->get_colour()!=c)
+            mvec.push_back(p->moves(find(p),this));
+    for(auto& v:mvec)
+        for(Move m:v)
+            if(m.end->occupier==k)
+                return true;
+    return false;
+}
+
+/*bool Board::check(int c,Move mv)
+{
+    Board cpy = *this;
+    cpy.make_move(mv);
+    bool rt = cpy.check(c);
+    return rt;
+}*/
+
+
 /*
 End board methods
 
@@ -270,6 +312,13 @@ Move::Move(Position* s,Position* e)
         value = end->occupier->get_value();
     else
         value = 0;
+}
+
+Move Move::inv()
+{
+    Move mv(end,start);
+    mv.value = -value;
+    return mv;
 }
 /*
 End struct methods
