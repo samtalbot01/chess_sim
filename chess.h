@@ -59,6 +59,7 @@ class Board
         Position* find(Position&);
     public:
         Board(int);
+        Board(const Board&); //copy constructor
         Position* find(Piece*);
         void destroy();
         const std::vector<Position> &get_positions() const;
@@ -71,6 +72,7 @@ class Board
         int process_move(Position*,Position*,std::vector<Move>&);
         bool check(int);
         bool check(int,Move);
+        std::vector<std::vector<Move>> all_moves(int);
 };
 
 

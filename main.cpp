@@ -4,21 +4,13 @@
 
 int main(int argc,char** argv)
 {
-    Board b(EMPTY);
-    auto k = new King(W);
-    auto r = new Rook(B);
-    b.add_piece(k,"A7");
-    b.add_piece(r,"A2");
-    if(b.check(W))
-        std::cout<<"check"<<std::endl;
-    else
-        std::cout<<"not"<< std::endl;
+    Board b(STANDARD);
     
-    /*
-    std::vector<Move> mv = r->moves(b.find(r),&b);
-    std::cout << "aaaaaa : "<<mv.size() << std::endl;
-    for(auto m:mv)
-        std::cout << m.end->token << std::endl;
-    */
+    //auto mvs = b.all_moves(W);
+    //std::cout << mvs.size() << "(number of vecs)" <<std::endl;
+    //for(auto& m:mvs)
+        //std::cout<<m.size()<<std::endl;
+    
+    b.destroy();
     return 0;
 }

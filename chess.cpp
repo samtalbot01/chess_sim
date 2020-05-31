@@ -98,7 +98,8 @@ Board::Board(int mode)
     {
         //don't add any pieces
     }
-
+    auto k = get_from_token("B1")->occupier;
+    std::cout<<k->get_full_name()<<std::endl;
 
     
 }
@@ -216,16 +217,18 @@ int Board::process_move(Position* o, Position* e, std::vector<Move>& l)
             if(e->occupier->get_colour()!=o->occupier->get_colour())
             {
                 Move mv(o,e);
-                //pchk = check(o->occupier->get_colour(),mv);
-                l.push_back(mv);
+                pchk = check(o->occupier->get_colour(),mv);
+                if(!pchk)
+                    l.push_back(mv);
             }
         }
         else
         {
             //unoccupied add move no stop
             Move mv(o,e);
-            //pchk = check(o->occupier->get_colour(),mv);
-            l.push_back(mv);
+            pchk = check(o->occupier->get_colour(),mv);
+            if(!pchk)
+                l.push_back(mv);
         }
     }
     return stop;
@@ -258,15 +261,32 @@ bool Board::check(int c)
     return false;
 }
 
-/*bool Board::check(int c,Move mv)
+/*
+cpy will drop out of scope and dealloc the position data but leave the pieces
+
+*/
+bool Board::check(int c,Move mv)
 {
-    Board cpy = *this;
-    cpy.make_move(mv);
+    Board cpy(*this);
+
+    //turn move on board b into move on board cpy
+    Move cpymove(cpy.find(*mv.start),cpy.find(*mv.end));
+
+    cpy.make_move(cpymove);
     bool rt = cpy.check(c);
     return rt;
-}*/
+}
 
+Board::Board(const Board& orig)
+{
+    pieces = orig.pieces;
+    positions = orig.positions;
+}
 
+std::vector<std::vector<Move>> Board::all_moves(int c)
+{
+    return {};
+}
 /*
 End board methods
 

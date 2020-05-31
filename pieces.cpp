@@ -19,14 +19,16 @@ std::vector<Move> Pawn::moves(Position* p,Board* b) const
             if(!e0->occupier)
             {
                 Move mv0(p,e0);
-                m.push_back(mv0);
+                if(!b->check(get_colour(),mv0))
+                    m.push_back(mv0);
                 if(p->rank==2)
                 {
                     auto e1 = b->traverse(p,0,2);
                     if(!e1->occupier)
                     {
                         Move mv1(p,e1);
-                        m.push_back(mv1);
+                        if(!b->check(get_colour(),mv1))
+                            m.push_back(mv1);
                     }
                 }
             }
@@ -39,14 +41,16 @@ std::vector<Move> Pawn::moves(Position* p,Board* b) const
                 if(e2->occupier->get_colour()!=get_colour())
                 {
                     Move mv2(p,e2);
-                    m.push_back(mv2);
+                    if(!b->check(get_colour(),mv2))
+                        m.push_back(mv2);
                 }
         if(e3)
             if(e3->occupier)
                 if(e3->occupier->get_colour()!=get_colour())
                 {
                     Move mv3(p,e3);
-                    m.push_back(mv3);
+                    if(!b->check(get_colour(),mv3))
+                        m.push_back(mv3);
                 }
     }
     else
@@ -57,14 +61,16 @@ std::vector<Move> Pawn::moves(Position* p,Board* b) const
             if(!e0->occupier)
             {
                 Move mv0(p,e0);
-                m.push_back(mv0);
+                if(!b->check(get_colour(),mv0))
+                    m.push_back(mv0);
                 if(p->rank==7)
                 {
                     auto e1 = b->traverse(p,0,-2);
                     if(!e1->occupier)
                     {
                         Move mv1(p,e1);
-                        m.push_back(mv1);
+                        if(!b->check(get_colour(),mv1))
+                            m.push_back(mv1);
                     }
                 }
             }
@@ -77,14 +83,16 @@ std::vector<Move> Pawn::moves(Position* p,Board* b) const
                 if(e2->occupier->get_colour()!=get_colour())
                 {
                     Move mv2(p,e2);
-                    m.push_back(mv2);
+                    if(!b->check(get_colour(),mv2))
+                        m.push_back(mv2);
                 }
         if(e3)
             if(e3->occupier)
                 if(e3->occupier->get_colour()!=get_colour())
                 {
                     Move mv3(p,e3);
-                    m.push_back(mv3);
+                    if(!b->check(get_colour(),mv3))
+                        m.push_back(mv3);
                 }
     }
     return m;
