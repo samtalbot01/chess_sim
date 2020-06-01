@@ -9,7 +9,8 @@ Pawn::Pawn(int c): Piece(c)
 
 std::vector<Move> Pawn::moves(Position* p,Board* b) const
 {
-    std::vector<Move> m;
+
+    std::vector<Move> m = {};
     //White side movements (this is only for pawns) 
     if(get_colour()==W)
     {
@@ -96,6 +97,7 @@ std::vector<Move> Pawn::moves(Position* p,Board* b) const
                 }
     }
     return m;
+    
 }
 
 //Rook
@@ -160,7 +162,7 @@ Knight::Knight(int c): Piece(c)
 
 std::vector<Move> Knight::moves(Position* p,Board* b) const
 {
-    std::vector<Move> m;
+    std::vector<Move> m = {};
 
     //top fork
     auto endpu = b->traverse(p,1,2);
@@ -198,7 +200,7 @@ Bishop::Bishop(int c): Piece(c)
 
 std::vector<Move> Bishop::moves(Position* p,Board* b) const
 {
-    std::vector<Move> m;
+    std::vector<Move> m = {};
 
     //NE diagonal
     int increment=1;
@@ -257,7 +259,7 @@ Queen::Queen(int c): Piece(c)
 std::vector<Move> Queen::moves(Position* p,Board* b) const
 {
     //Copy bishop code & rook code
-    std::vector<Move> m;
+    std::vector<Move> m = {};
 
     //upwards traverse
     int increment = 1;
@@ -353,7 +355,7 @@ King::King(int c): Piece(c)
 
 std::vector<Move> King::moves(Position* p,Board* b) const
 {
-    std::vector<Move> m;
+    std::vector<Move> m = {};
     //No quick way. just check all surrounding squares
     auto endp = b->traverse(p,1,0);
     b->process_move(p,endp,m);

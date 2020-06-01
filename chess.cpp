@@ -48,6 +48,7 @@ Board::Board(int mode)
     {
         //WHITE
         //PAWNS
+        
         for(char c='A';c<='H';c++)
         {
             std::ostringstream oss;
@@ -90,18 +91,14 @@ Board::Board(int mode)
         add_piece(new Queen(B),"D8");
 
         //KINGS
-        add_piece(new King(W),"E1");
+        //add_piece(new King(W),"E1");
 
-        add_piece(new King(B),"E8");
+        //add_piece(new King(B),"E8");
     }
     else if(mode==EMPTY)
     {
         //don't add any pieces
     }
-    auto k = get_from_token("B1")->occupier;
-    std::cout<<k->get_full_name()<<std::endl;
-
-    
 }
 
 const vector<Position> &Board::get_positions() const
@@ -236,7 +233,11 @@ int Board::process_move(Position* o, Position* e, std::vector<Move>& l)
 
 bool Board::check(int c)
 {
-    //Checks all enemy pieces moves for king attacks
+    //Checks all enemy pieces moves for king attacks 
+    //***DOESNT ANYMORE THIS CAUSES GIGA BUG***
+    
+    //checks horse squares, ranks & files for pieces that take on such positions
+
     Position* pos = 0;
     for(Piece* p:pieces)
         if(p->get_colour()==c&&p->get_type()=="King")
@@ -249,15 +250,94 @@ bool Board::check(int c)
         return false; //no king so can't be in check
     else
         k = pos->occupier;
-    
-    std::vector<std::vector<Move>> mvec;
-    for(Piece* p:pieces)
-        if(p->get_colour()!=c)
-            mvec.push_back(p->moves(find(p),this));
-    for(auto& v:mvec)
-        for(Move m:v)
-            if(m.end->occupier==k)
+
+    //pawns
+    int pawnrank = (c==W) ? 1 : -1;
+    auto p1 = traverse(pos,1,pawnrank); 
+    auto p2 = traverse(pos,-1,pawnrank);
+    if(p1)
+        if(p1->occupier)
+        {
+            if(p1->occupier->get_type()=="Pawn"&&p1->occupier->get_colour()!=c)
                 return true;
+        }
+    if(p2)
+        if(p2->occupier)
+        {
+            if(p2->occupier->get_type()=="Pawn"&&p2->occupier->get_colour()!=c)
+                return true;
+        }
+
+    //Knight
+    //top fork
+    auto endpu = traverse(pos,1,2);
+    auto endpu2 = traverse(pos,-1,2);
+    if(endpu)
+        if(endpu->occupier)
+        {
+            if(endpu->occupier->get_type()=="Knight"&&endpu->occupier->get_colour()!=c)
+                return true;
+        }
+    if(endpu2)
+        if(endpu2->occupier)
+        {
+            if(endpu2->occupier->get_type()=="Knight"&&endpu2->occupier->get_colour()!=c)
+                return true;
+        }
+
+    //down
+    auto endpd = traverse(pos,1,-2);
+    auto endpd2 = traverse(pos,-1,-2);
+    if(endpd)
+        if(endpd->occupier)
+        {
+            if(endpd->occupier->get_type()=="Knight"&&endpd->occupier->get_colour()!=c)
+                return true;
+        }
+    if(endpd2)
+        if(endpd2->occupier)
+        {
+            if(endpd2->occupier->get_type()=="Knight"&&endpd2->occupier->get_colour()!=c)
+                return true;
+        }
+    
+    //Left
+    auto endpl = traverse(pos,-2,1);
+    auto endpl2 = traverse(pos,-2,-1);
+    if(endpl)
+        if(endpl->occupier)
+        {
+            if(endpl->occupier->get_type()=="Knight"&&endpl->occupier->get_colour()!=c)
+                return true;
+        }
+    if(endpl2)
+        if(endpl2->occupier)
+        {
+            if(endpl2->occupier->get_type()=="Knight"&&endpl2->occupier->get_colour()!=c)
+                return true;
+        }
+
+    //Right
+    auto endpr = traverse(pos,2,1);
+    auto endpr2 = traverse(pos,2,-1);
+    if(endpr)
+        if(endpr->occupier)
+        {
+            if(endpr->occupier->get_type()=="Knight"&&endpr->occupier->get_colour()!=c)
+                return true;
+        }
+    if(endpr2)
+        if(endpr2->occupier)
+        {
+            if(endpr2->occupier->get_type()=="Knight"&&endpr2->occupier->get_colour()!=c)
+                return true;
+        }
+
+
+    //Rook
+
+
+    
     return false;
 }
 
@@ -285,7 +365,15 @@ Board::Board(const Board& orig)
 
 std::vector<std::vector<Move>> Board::all_moves(int c)
 {
-    return {};
+    std::vector<std::vector<Move>> mvecs = {};
+    for(Piece* p:pieces)
+        if(p->get_colour()==c)
+        {
+            Position* pos = find(p);
+            if(pos)
+                mvecs.push_back(p->moves(pos,this));
+        }
+    return mvecs;
 }
 /*
 End board methods
