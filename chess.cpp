@@ -285,6 +285,65 @@ bool Board::check(int c)
                 return true;
         }
 
+    //Individually check for king on close square
+    auto k1 = traverse(pos,1,0);
+    auto k2 = traverse(pos,-1,0);
+    auto k3 = traverse(pos,0,1);
+    auto k4 = traverse(pos,0,-1);
+    auto k5 = traverse(pos,1,1);
+    auto k6 = traverse(pos,1,-1);
+    auto k7 = traverse(pos,-1,1);
+    auto k8 = traverse(pos,-1,-1);
+    if(k1)
+    {
+        if(k1->occupier)
+            if(k1->occupier->get_type()=="King"&&k1->occupier->get_colour()!=c)
+                return true;
+    }
+    if(k2)
+    {
+        if(k2->occupier)
+            if(k2->occupier->get_type()=="King"&&k2->occupier->get_colour()!=c)
+                return true;
+    }
+    if(k3)
+    {
+        if(k3->occupier)
+            if(k3->occupier->get_type()=="King"&&k3->occupier->get_colour()!=c)
+                return true;
+    }
+    if(k4)
+    {
+        if(k4->occupier)
+            if(k4->occupier->get_type()=="King"&&k4->occupier->get_colour()!=c)
+                return true;
+    }
+    if(k5)
+    {
+        if(k5->occupier)
+            if(k5->occupier->get_type()=="King"&&k5->occupier->get_colour()!=c)
+                return true;
+    }
+    if(k6)
+    {
+        if(k6->occupier)
+            if(k6->occupier->get_type()=="King"&&k6->occupier->get_colour()!=c)
+                return true;
+    }
+    if(k7)
+    {
+        if(k7->occupier)
+            if(k7->occupier->get_type()=="King"&&k7->occupier->get_colour()!=c)
+                return true;
+    }
+    if(k8)
+    {
+        if(k8->occupier)
+            if(k8->occupier->get_type()=="King"&&k8->occupier->get_colour()!=c)
+                return true;
+    }
+
+
     //down
     auto endpd = traverse(pos,1,-2);
     auto endpd2 = traverse(pos,-1,-2);
@@ -335,7 +394,68 @@ bool Board::check(int c)
 
 
     //Rook
+    //upward
+    int increment = 1;
+    while(traverse(pos,0,increment))
+    {
+        auto tp = traverse(pos,0,increment);
+        if(endpr)
+            if(endpr->occupier)
+            {
+                if(endpr->occupier->get_type()=="Rook"||endpr->occupier->get_type()=="Queen")
+                    if(endpr->occupier->get_colour()!=c)
+                        return true;
+                break;
+            }
+        increment++;
+    }
 
+    //down
+    increment = 1;
+    while(traverse(pos,0,-increment))
+    {
+        auto tp = traverse(pos,0,-increment);
+        if(endpr)
+            if(endpr->occupier)
+            {
+                if(endpr->occupier->get_type()=="Rook"||endpr->occupier->get_type()=="Queen")
+                    if(endpr->occupier->get_colour()!=c)
+                        return true;
+                break;
+            }
+        increment++;
+    }
+
+    //right
+    increment = 1;
+    while(traverse(pos,increment,0))
+    {
+        auto tp = traverse(pos,increment,0);
+        if(endpr)
+            if(endpr->occupier)
+            {
+                if(endpr->occupier->get_type()=="Rook"||endpr->occupier->get_type()=="Queen")
+                    if(endpr->occupier->get_colour()!=c)
+                        return true;
+                break;
+            }
+        increment++;
+    }
+
+    increment = 1;
+    while(traverse(pos,-increment,0))
+    {
+        auto tp = traverse(pos,-increment,0);
+        if(endpr)
+            if(endpr->occupier)
+            {
+                if(endpr->occupier->get_type()=="Rook"||endpr->occupier->get_type()=="Queen")
+                    if(endpr->occupier->get_colour()!=c)
+                        return true;
+                break;
+            }
+        increment++;
+    }
 
     
     return false;
