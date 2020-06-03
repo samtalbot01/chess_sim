@@ -72,7 +72,7 @@ class Board
         int process_move(Position*,Position*,std::vector<Move>&);
         bool check(int);
         bool check(int,Move);
-        std::vector<std::vector<Move>> all_moves(int);
+        std::vector<Move> all_moves(int);
 };
 
 

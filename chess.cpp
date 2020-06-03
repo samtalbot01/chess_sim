@@ -91,9 +91,9 @@ Board::Board(int mode)
         add_piece(new Queen(B),"D8");
 
         //KINGS
-        //add_piece(new King(W),"E1");
+        add_piece(new King(W),"E1");
 
-        //add_piece(new King(B),"E8");
+        add_piece(new King(B),"E8");
     }
     else if(mode==EMPTY)
     {
@@ -237,6 +237,9 @@ bool Board::check(int c)
     //***DOESNT ANYMORE THIS CAUSES GIGA BUG***
     
     //checks horse squares, ranks & files for pieces that take on such positions
+
+    //This is a very long method. could likely be refactored some to be shorter but it would just be more random functions with next to 
+    //no functionality outside this function
 
     Position* pos = 0;
     for(Piece* p:pieces)
@@ -399,11 +402,11 @@ bool Board::check(int c)
     while(traverse(pos,0,increment))
     {
         auto tp = traverse(pos,0,increment);
-        if(endpr)
-            if(endpr->occupier)
+        if(tp)
+            if(tp->occupier)
             {
-                if(endpr->occupier->get_type()=="Rook"||endpr->occupier->get_type()=="Queen")
-                    if(endpr->occupier->get_colour()!=c)
+                if(tp->occupier->get_type()=="Rook"||tp->occupier->get_type()=="Queen")
+                    if(tp->occupier->get_colour()!=c)
                         return true;
                 break;
             }
@@ -415,11 +418,11 @@ bool Board::check(int c)
     while(traverse(pos,0,-increment))
     {
         auto tp = traverse(pos,0,-increment);
-        if(endpr)
-            if(endpr->occupier)
+        if(tp)
+            if(tp->occupier)
             {
-                if(endpr->occupier->get_type()=="Rook"||endpr->occupier->get_type()=="Queen")
-                    if(endpr->occupier->get_colour()!=c)
+                if(tp->occupier->get_type()=="Rook"||tp->occupier->get_type()=="Queen")
+                    if(tp->occupier->get_colour()!=c)
                         return true;
                 break;
             }
@@ -431,11 +434,44 @@ bool Board::check(int c)
     while(traverse(pos,increment,0))
     {
         auto tp = traverse(pos,increment,0);
-        if(endpr)
-            if(endpr->occupier)
+        if(tp)
+            if(tp->occupier)
             {
-                if(endpr->occupier->get_type()=="Rook"||endpr->occupier->get_type()=="Queen")
-                    if(endpr->occupier->get_colour()!=c)
+                if(tp->occupier->get_type()=="Rook"||tp->occupier->get_type()=="Queen")
+                    if(tp->occupier->get_colour()!=c)
+                        return true;
+                break;
+            }
+        increment++;
+    }
+
+    //left
+    increment = 1;
+    while(traverse(pos,-increment,0))
+    {
+        auto tp = traverse(pos,-increment,0);
+        if(tp)
+            if(tp->occupier)
+            {
+                if(tp->occupier->get_type()=="Rook"||tp->occupier->get_type()=="Queen")
+                    if(tp->occupier->get_colour()!=c)
+                        return true;
+                break;
+            }
+        increment++;
+    }
+
+
+    //bishop
+    increment = 1;
+    while(traverse(pos,increment,increment))
+    {
+        auto tp = traverse(pos,increment,increment);
+        if(tp)
+            if(tp->occupier)
+            {
+                if(tp->occupier->get_type()=="Bishop"||tp->occupier->get_type()=="Queen")
+                    if(tp->occupier->get_colour()!=c)
                         return true;
                 break;
             }
@@ -443,20 +479,49 @@ bool Board::check(int c)
     }
 
     increment = 1;
-    while(traverse(pos,-increment,0))
+    while(traverse(pos,increment,-increment))
     {
-        auto tp = traverse(pos,-increment,0);
-        if(endpr)
-            if(endpr->occupier)
+        auto tp = traverse(pos,increment,-increment);
+        if(tp)
+            if(tp->occupier)
             {
-                if(endpr->occupier->get_type()=="Rook"||endpr->occupier->get_type()=="Queen")
-                    if(endpr->occupier->get_colour()!=c)
+                if(tp->occupier->get_type()=="Bishop"||tp->occupier->get_type()=="Queen")
+                    if(tp->occupier->get_colour()!=c)
                         return true;
                 break;
             }
         increment++;
     }
 
+    increment = 1;
+    while(traverse(pos,-increment,increment))
+    {
+        auto tp = traverse(pos,-increment,increment);
+        if(tp)
+            if(tp->occupier)
+            {
+                if(tp->occupier->get_type()=="Bishop"||tp->occupier->get_type()=="Queen")
+                    if(tp->occupier->get_colour()!=c)
+                        return true;
+                break;
+            }
+        increment++;
+    }
+
+    increment = 1;
+    while(traverse(pos,-increment,-increment))
+    {
+        auto tp = traverse(pos,-increment,-increment);
+        if(tp)
+            if(tp->occupier)
+            {
+                if(tp->occupier->get_type()=="Bishop"||tp->occupier->get_type()=="Queen")
+                    if(tp->occupier->get_colour()!=c)
+                        return true;
+                break;
+            }
+        increment++;
+    }
     
     return false;
 }
@@ -483,7 +548,7 @@ Board::Board(const Board& orig)
     positions = orig.positions;
 }
 
-std::vector<std::vector<Move>> Board::all_moves(int c)
+std::vector<Move> Board::all_moves(int c)
 {
     std::vector<std::vector<Move>> mvecs = {};
     for(Piece* p:pieces)
@@ -493,7 +558,13 @@ std::vector<std::vector<Move>> Board::all_moves(int c)
             if(pos)
                 mvecs.push_back(p->moves(pos,this));
         }
-    return mvecs;
+
+    std::vector<Move> fin;
+    for(auto& mv:mvecs)
+        for(auto& m:mv)
+            fin.push_back(m);
+
+    return fin;
 }
 /*
 End board methods
