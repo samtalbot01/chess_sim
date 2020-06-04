@@ -566,6 +566,16 @@ std::vector<Move> Board::all_moves(int c)
 
     return fin;
 }
+
+bool Board::is_valid(Move& m) 
+{
+    int col = m.start->occupier->get_colour();
+    auto mvs = all_moves(col);
+    for(Move& mov:mvs)
+        if(mov==m)
+            return true;
+    return false;
+}
 /*
 End board methods
 
@@ -613,11 +623,26 @@ Move::Move(Position* s,Position* e)
         value = 0;
 }
 
+Move::Move()
+{
+    start=0;
+    end=0;
+    value=0;
+}
 Move Move::inv()
 {
     Move mv(end,start);
     mv.value = -value;
     return mv;
+}
+
+bool Move::operator==(const Move& m) const
+{
+    if(start==m.start&&end==m.end)
+        return true;
+    else
+        return false;
+    
 }
 /*
 End struct methods

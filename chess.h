@@ -29,7 +29,9 @@ struct Move
     Position* start;
     int value;
     Move(Position*,Position*);
+    Move();
     Move inv();
+    bool operator==(const Move&) const;
 };
 
 class Piece
@@ -67,7 +69,7 @@ class Board
         int add_piece(Piece*,Position*);
         int add_piece(Piece*,std::string); 
         int make_move(Move);
-        //bool is_valid(Move);
+        bool is_valid(Move&);
         Position* traverse(Position* ,int,int);
         int process_move(Position*,Position*,std::vector<Move>&);
         bool check(int);
