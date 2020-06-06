@@ -535,7 +535,7 @@ bool Board::check(int c,Move mv)
     Board cpy(*this);
 
     //turn move on board b into move on board cpy
-    Move cpymove(cpy.find(*mv.start),cpy.find(*mv.end));
+    Move cpymove = cpy.convert_move(mv);
 
     cpy.make_move(cpymove);
     bool rt = cpy.check(c);
@@ -575,6 +575,29 @@ bool Board::is_valid(Move& m)
         if(mov==m)
             return true;
     return false;
+}
+
+//main use is for converting a move when a board is copied
+Move Board::convert_move(Move& m)
+{
+    return Move(find(*m.start),find(*m.end));
+}
+
+//returns an empty move (use !) if wrong or illegal
+Move Board::parse_move(std::string in)
+{
+    if(in.size()!=4)
+        return Move();
+    std::string stok = in.substr(0,2);
+    std::string etok = in.substr(2,2);
+    Position* s = get_from_token(stok);
+    Position* e = get_from_token(etok);
+    if(!s||!e)
+        return Move();
+    Move m(s,e);
+    if(!is_valid(m))
+        return Move();
+    return m;
 }
 /*
 End board methods
@@ -643,6 +666,19 @@ bool Move::operator==(const Move& m) const
     else
         return false;
     
+}
+
+std::string Move::to_string() const
+{
+    return start->token+end->token;   
+}
+
+bool Move::operator!() const
+{
+    if(start==0&&end==0&&value==0)
+        return true;
+    else
+        return false;
 }
 /*
 End struct methods

@@ -17,6 +17,7 @@ struct Position
     int rank;
     Piece* occupier;
     std::string token;
+    
     Position(char,int);
     bool operator== (const Position&) const; //equality given pos struct
     bool operator== (const std::string&) const; //equality given token string
@@ -28,10 +29,13 @@ struct Move
     Position* end;
     Position* start;
     int value;
+
     Move(Position*,Position*);
     Move();
     Move inv();
     bool operator==(const Move&) const;
+    std::string to_string() const;
+    bool operator!() const;
 };
 
 class Piece
@@ -75,6 +79,8 @@ class Board
         bool check(int);
         bool check(int,Move);
         std::vector<Move> all_moves(int);
+        Move convert_move(Move&);
+        Move parse_move(std::string);
 };
 
 

@@ -6,10 +6,18 @@ int main(int argc,char** argv)
 {
     Board b(STANDARD);
 
-    auto mvs = b.all_moves(W);
-    std::cout << mvs.size() << "(number legal moves)" <<std::endl;
-    for(auto m:mvs)
-        std::cout<<m.end->token<<std::endl;
+    std::string s;
+    while(std::getline(std::cin,s))
+    {
+        auto mv = b.parse_move(s);
+        if(!mv)
+        {
+            std::cout<<"not a move bro"<<std::endl;
+        }
+        else
+            b.make_move(mv);
+        std::cout<<b.to_string()<<std::endl;
+    }
     //b.destroy();
     return 0;
 }
