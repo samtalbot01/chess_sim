@@ -1,4 +1,3 @@
-#include "chess.h"
 #include "engine.h"
 using namespace eng;
 

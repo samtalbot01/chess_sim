@@ -1,7 +1,7 @@
 #ifndef CHESS_ENGINE_H
 #define CHESS_ENGINE_H
 
-#include "chess.h"
+#include "chesslib.h"
 #include <list>
 
 namespace eng
