@@ -583,6 +583,14 @@ Move Board::convert_move(Move& m)
     return Move(find(*m.start),find(*m.end));
 }
 
+
+MovePair Board::convert_movepair(MovePair& mp)
+{
+    MovePair npair(convert_move(mp.f),convert_move(mp.s));
+    return npair;
+}
+
+
 //returns an empty move (use !) if wrong or illegal
 Move Board::parse_move(std::string in)
 {
@@ -679,6 +687,13 @@ bool Move::operator!() const
         return true;
     else
         return false;
+}
+
+MovePair::MovePair(Move first,Move second)
+{
+    f=first;
+    s=second;
+    value = f.value-s.value;   
 }
 /*
 End struct methods

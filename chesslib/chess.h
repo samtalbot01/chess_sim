@@ -8,6 +8,7 @@
 #define STANDARD 0
 #define EMPTY -1
 
+//using eng::MovePair;
 class Piece;
 class Board;
 
@@ -24,6 +25,7 @@ struct Position
 };
 
 
+
 struct Move
 {
     Position* end;
@@ -37,6 +39,7 @@ struct Move
     std::string to_string() const;
     bool operator!() const;
 };
+
 
 class Piece
 {
